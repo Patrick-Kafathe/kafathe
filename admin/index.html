@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Admin | Patrick Kafathe</title>
+  <link rel="icon" href="../assets/logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <!-- LOGIN -->
+  <section class="login" id="login">
+    <form class="card login-card" id="loginForm">
+      <img src="../assets/logo.png" alt="I'm Kafathe" class="login-logo">
+      <h1>Admin panel</h1>
+      <p class="muted">Sign in to manage your portfolio.</p>
+      <label>Password<input type="password" id="pw" autocomplete="current-password" required autofocus></label>
+      <p class="error" id="loginErr" hidden>Incorrect password.</p>
+      <button class="btn green full" type="submit">Sign in</button>
+      <p class="hint" id="defaultHint" hidden>First time? The default password is <b>kafathe2026</b>. Change it under Settings.</p>
+      <a class="muted small" href="../index.html">← Back to website</a>
+    </form>
+  </section>
+
+  <div class="app" id="app" hidden>
+    <aside class="side" id="side">
+      <div class="brand"><img src="../assets/logo.png" alt="I'm Kafathe"></div>
+      <nav class="nav">
+        <button data-tab="dashboard" class="on"><i>◧</i>Dashboard</button>
+        <button data-tab="projects"><i>▣</i>Projects</button>
+        <button data-tab="banner"><i>▭</i>Banner &amp; Hero</button>
+        <button data-tab="about"><i>☺</i>About</button>
+        <button data-tab="services"><i>✦</i>Services</button>
+        <button data-tab="reviews"><i>★</i>Reviews</button>
+        <button data-tab="contact"><i>✉</i>Contact &amp; Social</button>
+        <button data-tab="appearance"><i>◐</i>Appearance &amp; SEO</button>
+        <button data-tab="settings"><i>⚙</i>Settings</button>
+      </nav>
+      <div class="side-foot">
+        <a class="btn ghost sm full" href="../index.html" target="_blank" rel="noopener">View site ↗</a>
+        <button class="btn dark sm full" id="btnLogout">Log out</button>
+      </div>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <button class="burger" id="burger" aria-label="Menu">☰</button>
+        <h1 id="pageTitle">Dashboard</h1>
+        <span class="saved" id="savedState">All changes saved</span>
+        <button class="btn green sm" id="btnExport">Export site.json</button>
+      </header>
+
+      <div class="content">
+        <!-- DASHBOARD -->
+        <section class="tab" id="tab-dashboard">
+          <div class="stats" id="stats"></div>
+          <div class="grid2">
+            <div class="card"><h3>Setup checklist</h3><ul class="check-list" id="checklist"></ul></div>
+            <div class="card">
+              <h3>Quick actions</h3>
+              <div class="qa">
+                <button class="btn ghost sm" data-go="projects">＋ Add project</button>
+                <button class="btn ghost sm" data-go="banner">Edit hero</button>
+                <button class="btn ghost sm" data-go="contact">Update contacts</button>
+                <button class="btn ghost sm" data-go="appearance">Change photo</button>
+              </div>
+              <h3 class="mt">Projects by category</h3>
+              <div id="catBars"></div>
+            </div>
+          </div>
+          <div class="notice"><b>Publishing tip:</b> changes show on this browser immediately. To publish them for everyone, click <b>Export site.json</b> (top right) and replace <code>data/site.json</code> on your hosting.</div>
+        </section>
+
+        <!-- PROJECTS -->
+        <section class="tab" id="tab-projects" hidden>
+          <div class="proj-layout">
+            <div class="card form-card">
+              <h2 id="formTitle">Add a project</h2>
+              <form id="projectForm">
+                <label><span class="lbl">Project title *</span><input id="fTitle" required maxlength="90" placeholder="e.g. Kimaru & Co. website"></label>
+                <div class="two">
+                  <label><span class="lbl">Category *</span><select id="fCat" required></select></label>
+                  <label><span class="lbl">Live link</span><input id="fLink" type="url" placeholder="https://..."></label>
+                </div>
+                <label><span class="lbl">Technologies <small>(comma separated)</small></span><input id="fTech" placeholder="HTML5, CSS3, JavaScript, MySQL"></label>
+                <label><span class="lbl">Description * <button type="button" class="ai" id="aiProject">✨ Auto-fill with AI</button></span><textarea id="fDesc" rows="4" required maxlength="500" placeholder="What was built or designed, and the result."></textarea></label>
+                <label class="check"><input type="checkbox" id="fFeat" checked> Show in homepage showcase slides</label>
+
+                <div class="drop" id="drop">
+                  <input type="file" id="fImgs" accept="image/*" multiple hidden>
+                  <span class="plus">＋</span><span><b>Upload images</b> <small>click or drag · auto-resized · first is the cover</small></span>
+                </div>
+                <div class="thumbs" id="thumbs"></div>
+
+                <p class="error" id="formErr" hidden></p>
+                <div class="row">
+                  <button class="btn green" type="submit" id="btnSave">Save project</button>
+                  <button class="btn ghost" type="button" id="btnCancel" hidden>Cancel</button>
+                </div>
+              </form>
+            </div>
+            <div>
+              <div class="list-head"><h2>Your projects <span class="count" id="count">0</span></h2><small class="muted" id="storeInfo"></small></div>
+              <div id="list"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- BANNER & HERO -->
+        <section class="tab" id="tab-banner" hidden>
+          <div class="grid2">
+            <div class="card">
+              <h3>Announcement banner</h3><p class="muted small">A slim bar at the very top of your site — great for offers or availability.</p>
+              <label class="check"><input type="checkbox" data-s="announce.enabled" data-type="bool"> Show the banner</label>
+              <label><span class="lbl">Banner text <button type="button" class="ai" data-ai="announce.text">✨ AI</button></span><input data-s="announce.text" maxlength="140"></label>
+              <div class="two">
+                <label><span class="lbl">Link</span><input data-s="announce.link" placeholder="#contact or https://..."></label>
+                <label><span class="lbl">Colour</span><select data-s="announce.tone"><option value="green">Green</option><option value="dark">Dark</option><option value="amber">Amber</option></select></label>
+              </div>
+            </div>
+            <div class="card">
+              <h3>Hero (top of the page)</h3>
+              <div class="two">
+                <label><span class="lbl">Your name</span><input data-s="hero.name"></label>
+                <label><span class="lbl">Greeting</span><input data-s="hero.hello"></label>
+              </div>
+              <label><span class="lbl">Rotating job titles <small>(one per line)</small></span><textarea data-s="hero.roles" data-type="lines" rows="5"></textarea></label>
+              <label><span class="lbl">Intro text <button type="button" class="ai" data-ai="hero.intro">✨ AI</button></span><textarea data-s="hero.intro" rows="4"></textarea></label>
+              <div class="two">
+                <label><span class="lbl">Button 1</span><input data-s="hero.cta1"></label>
+                <label><span class="lbl">Button 2</span><input data-s="hero.cta2"></label>
+              </div>
+              <label><span class="lbl">Availability label</span><input data-s="hero.eyebrow"></label>
+              <label class="check"><input type="checkbox" data-s="hero.available" data-type="bool"> Show the pulsing "available" dot</label>
+              <label><span class="lbl">Line under buttons</span><input data-s="hero.meta"></label>
+            </div>
+          </div>
+        </section>
+
+        <!-- ABOUT -->
+        <section class="tab" id="tab-about" hidden>
+          <div class="card narrow">
+            <h3>About section</h3>
+            <label><span class="lbl">Opening statement <button type="button" class="ai" data-ai="about.lead">✨ AI</button></span><textarea data-s="about.lead" rows="3"></textarea></label>
+            <label><span class="lbl">Main text <small>(blank line = new paragraph)</small> <button type="button" class="ai" data-ai="about.body">✨ AI</button></span><textarea data-s="about.body" rows="9"></textarea></label>
+            <label><span class="lbl">Philosophy <button type="button" class="ai" data-ai="about.philosophy">✨ AI</button></span><textarea data-s="about.philosophy" rows="3"></textarea></label>
+          </div>
+        </section>
+
+        <!-- SERVICES -->
+        <section class="tab" id="tab-services" hidden>
+          <div class="card narrow">
+            <div class="list-head"><h3>Services</h3><button class="btn green sm" id="addService" type="button">＋ Add service</button></div>
+            <p class="muted small">Shown as cards on your site. Use the arrows to reorder.</p>
+            <div id="serviceEditor"></div>
+          </div>
+        </section>
+
+
+        <!-- REVIEWS -->
+        <section class="tab" id="tab-reviews" hidden>
+          <div class="grid2">
+            <div class="card">
+              <h3>Reviews section</h3>
+              <label class="check"><input type="checkbox" data-s="reviews.enabled" data-type="bool"> Show the Reviews section on the site</label>
+              <label><span class="lbl">Reviews server file <small>(leave as is)</small></span><input data-s="reviews.api" placeholder="api/reviews.php"></label>
+              <p class="muted small">Clients write reviews on your site (with the ✨ helper). They stay hidden until you approve them here. This needs PHP hosting; without it, reviews are sent to you on WhatsApp and you add them by hand below.</p>
+            </div>
+            <div class="card">
+              <h3>Approve client reviews</h3>
+              <div class="two"><label><span class="lbl">Admin token</span><input type="password" id="rvToken" autocomplete="off" placeholder="from api/config.php"></label>
+              <div class="rv-load"><button class="btn dark sm" id="rvLoad" type="button">Load reviews</button></div></div>
+              <p class="muted small" id="rvStatus">Set <code>admin_token</code> in <code>api/config.php</code> on your hosting first, then enter the same phrase here.</p>
+              <div id="rvAdminList"></div>
+            </div>
+            <div class="card span2">
+              <div class="list-head"><h3>Add a review by hand</h3><small class="muted">e.g. one a client sent you on WhatsApp</small></div>
+              <div class="two">
+                <label><span class="lbl">Client name *</span><input id="rvmName" maxlength="60"></label>
+                <label><span class="lbl">Role &amp; business</span><input id="rvmRole" maxlength="80"></label>
+              </div>
+              <div class="two">
+                <label><span class="lbl">Rating</span><select id="rvmRating"><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select></label>
+                <label><span class="lbl">About</span><select id="rvmTopic"><option>Website</option><option>Software</option><option>Database</option><option>Photography</option><option>Design</option><option>Other</option></select></label>
+              </div>
+              <label><span class="lbl">Review text *</span><textarea id="rvmText" rows="3" maxlength="500"></textarea></label>
+              <div class="row"><button class="btn green sm" id="rvmAdd" type="button">Add review</button></div>
+              <div id="rvManualList"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section class="tab" id="tab-contact" hidden>
+          <div class="grid2">
+            <div class="card">
+              <h3>Contact details</h3>
+              <label><span class="lbl">Main email</span><input type="email" data-s="contact.email"></label>
+              <label><span class="lbl">Second email</span><input type="email" data-s="contact.email2"></label>
+              <div class="two">
+                <label><span class="lbl">WhatsApp <small>(with country code)</small></span><input data-s="contact.whatsapp" placeholder="254725481338"></label>
+                <label><span class="lbl">Phone (display)</span><input data-s="contact.phone"></label>
+              </div>
+              <label><span class="lbl">Location</span><input data-s="contact.location"></label>
+            </div>
+            <div class="card">
+              <h3>Social links</h3><p class="muted small">Only links you fill in will appear on the site.</p>
+              <label><span class="lbl">LinkedIn</span><input type="url" data-s="contact.socials.linkedin" placeholder="https://linkedin.com/in/..."></label>
+              <label><span class="lbl">GitHub</span><input type="url" data-s="contact.socials.github" placeholder="https://github.com/..."></label>
+              <div class="two">
+                <label><span class="lbl">Instagram</span><input type="url" data-s="contact.socials.instagram"></label>
+                <label><span class="lbl">Facebook</span><input type="url" data-s="contact.socials.facebook"></label>
+                <label><span class="lbl">TikTok</span><input type="url" data-s="contact.socials.tiktok"></label>
+                <label><span class="lbl">X (Twitter)</span><input type="url" data-s="contact.socials.x"></label>
+              </div>
+              <label><span class="lbl">YouTube</span><input type="url" data-s="contact.socials.youtube"></label>
+            </div>
+            <div class="card">
+              <h3>WhatsApp chat bubble</h3><p class="muted small">The floating, vibrating button on your site with funny pop-up lines.</p>
+              <label class="check"><input type="checkbox" data-s="wa.enabled" data-type="bool"> Show the floating WhatsApp button</label>
+              <label class="check"><input type="checkbox" data-s="wa.popup" data-type="bool"> Pop up the chat box automatically after a few seconds</label>
+              <label><span class="lbl">Name shown in the chat box</span><input data-s="wa.name"></label>
+              <label><span class="lbl">Pre-filled WhatsApp message</span><textarea data-s="wa.prefill" rows="2"></textarea></label>
+              <label><span class="lbl">Funny pop-up lines <small>(one per line)</small></span><textarea data-s="wa.bubbles" data-type="lines" rows="6"></textarea></label>
+            </div>
+            <div class="card">
+              <h3>Price list button</h3><p class="muted small">The "Check website prices" button in the Contact section downloads this file.</p>
+              <label><span class="lbl">Button text</span><input data-s="prices.label"></label>
+              <label><span class="lbl">File path <small>(inside your site folder)</small></span><input data-s="prices.file" placeholder="assets/docs/MK-Technologies-Website-Packages.pdf"></label>
+              <p class="muted small">To update the prices, replace the PDF in <code>assets/docs/</code> keeping the same file name.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- APPEARANCE -->
+        <section class="tab" id="tab-appearance" hidden>
+          <div class="grid2">
+            <div class="card">
+              <h3>Profile photo</h3>
+              <div class="photo-row">
+                <img id="profilePrev" src="../assets/profile.jpg" alt="Profile preview">
+                <div>
+                  <input type="file" id="profileFile" accept="image/*" hidden>
+                  <button class="btn ghost sm" id="btnProfile" type="button">Upload new photo</button>
+                  <button class="btn ghost sm" id="btnProfileReset" type="button">Use original</button>
+                  <p class="muted small">Portrait photos work best (4:5).</p>
+                </div>
+              </div>
+              <h3 class="mt">Accent colour</h3>
+              <div class="swatches" id="swatches"></div>
+              <label><span class="lbl">Custom colour</span><input type="color" data-s="appearance.accent" class="color"></label>
+            </div>
+            <div class="card">
+              <h3>Search engines (SEO)</h3>
+              <label><span class="lbl">Page title</span><input data-s="seo.title" maxlength="70"></label>
+              <label><span class="lbl">Description <button type="button" class="ai" data-ai="seo.description">✨ AI</button></span><textarea data-s="seo.description" rows="4" maxlength="200"></textarea></label>
+            </div>
+          </div>
+        </section>
+
+        <!-- SETTINGS -->
+        <section class="tab" id="tab-settings" hidden>
+          <div class="grid2">
+            <div class="card">
+              <h3>Admin password</h3>
+              <label><span class="lbl">New password <small>(8+ characters)</small></span><input type="password" id="newPw" autocomplete="new-password"></label>
+              <label><span class="lbl">Confirm password</span><input type="password" id="newPw2" autocomplete="new-password"></label>
+              <button class="btn dark sm" id="btnPw" type="button">Update password</button>
+              <p class="muted small">This is a convenience lock for the admin page, not server-level security.</p>
+            </div>
+            <div class="card">
+              <h3>AI assistant</h3>
+              <p class="badge-line"><span class="pill" id="aiState"></span></p>
+              <p class="muted small">The ✨ buttons work out of the box with the built-in writer. For smarter, image-aware results, add your own Claude API key — it stays in this browser only and is never exported.</p>
+              <label><span class="lbl">Claude API key <small>(optional)</small></span><input type="password" id="aiKey" placeholder="sk-ant-..." autocomplete="off"></label>
+              <div class="row"><button class="btn dark sm" id="btnAiSave" type="button">Save key</button><button class="btn ghost sm" id="btnAiClear" type="button">Remove key</button></div>
+            </div>
+            <div class="card">
+              <h3>Backup &amp; restore</h3>
+              <p class="muted small">Export everything (projects and settings) to one file, or restore from a previous export.</p>
+              <div class="row">
+                <button class="btn green sm" id="btnExport2" type="button">Export site.json</button>
+                <label class="btn ghost sm file">Import<input type="file" id="importFile" accept="application/json" hidden></label>
+              </div>
+              <p class="small muted" id="storeUse"></p>
+            </div>
+            <div class="card">
+              <h3>Reset</h3>
+              <p class="muted small">Restore all text and settings to the original defaults. Your projects are not touched.</p>
+              <button class="btn danger sm" id="btnReset" type="button">Reset site settings</button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+  <script src="../store.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
