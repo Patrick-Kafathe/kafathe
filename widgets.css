@@ -1,0 +1,42 @@
+/* ================= WhatsApp widget ================= */
+.wa{position:fixed;right:18px;bottom:18px;z-index:250;display:flex;flex-direction:column;align-items:flex-end;gap:12px}
+.wa[hidden]{display:none}
+.wa-btn{position:relative;width:62px;height:62px;border-radius:50%;border:none;background:#25d366;cursor:pointer;display:grid;place-items:center;box-shadow:0 12px 28px -8px rgba(37,211,102,.8);animation:vibrate 4.5s ease-in-out infinite;transform-origin:50% 60%}
+.wa-btn svg{width:34px;height:34px}
+.wa-btn .ring{position:absolute;inset:0;border-radius:50%;border:2px solid #25d366;animation:ping 2.2s cubic-bezier(.2,.6,.3,1) infinite;pointer-events:none}
+.wa-btn .ring.r2{animation-delay:1.1s}
+.wa-badge{position:absolute;top:-3px;right:-3px;min-width:20px;height:20px;border-radius:99px;background:#ff3b30;color:#fff;font:800 .7rem var(--head);display:grid;place-items:center;border:2px solid #fff;animation:badge 1.6s ease-in-out infinite}
+.wa-badge[hidden]{display:none}
+.wa.is-open .wa-btn{animation:none}
+@keyframes ping{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.9);opacity:0}}
+@keyframes badge{50%{transform:scale(1.18)}}
+@keyframes vibrate{0%,62%,100%{transform:none}
+  64%{transform:translateX(-3px) rotate(-10deg)}66%{transform:translateX(3px) rotate(10deg)}68%{transform:translateX(-3px) rotate(-10deg)}
+  70%{transform:translateX(3px) rotate(10deg)}72%{transform:translateX(-2px) rotate(-7deg)}74%{transform:translateX(2px) rotate(7deg)}76%{transform:translateX(-1px) rotate(-3deg)}78%{transform:none}}
+.wa-tip{max-width:240px;background:#fff;border-radius:16px 16px 4px 16px;padding:11px 14px;box-shadow:0 14px 34px -14px rgba(0,0,0,.45);font-size:.86rem;font-weight:600;line-height:1.4;color:var(--ink);opacity:0;transform:translateY(8px) scale(.96);transition:.25s;border:1px solid var(--line)}
+.wa-tip.show{opacity:1;transform:none}.wa-tip[hidden]{display:none}
+.wa-pop{width:min(320px,calc(100vw - 36px));background:#efeae2;border-radius:20px;overflow:hidden;box-shadow:0 24px 60px -18px rgba(0,0,0,.55);opacity:0;transform:translateY(14px) scale(.96);transform-origin:100% 100%;transition:.22s}
+.wa-pop.open{opacity:1;transform:none}.wa-pop[hidden]{display:none}
+.wa-head{background:#075e54;color:#fff;display:flex;align-items:center;gap:11px;padding:12px 14px}
+.wa-av{width:40px;height:40px;border-radius:50%;object-fit:cover;object-position:50% 15%;border:2px solid rgba(255,255,255,.5)}
+.wa-head b{display:block;font:700 .95rem var(--head);line-height:1.2}
+.wa-head small{font-size:.74rem;opacity:.9;display:flex;align-items:center;gap:5px}
+.wa-head small i{width:7px;height:7px;border-radius:50%;background:#5cf08c;display:inline-block}
+.wa-x{margin-left:auto;background:none;border:none;color:#fff;font-size:1rem;cursor:pointer;opacity:.85;padding:4px}
+.wa-body{padding:16px 14px 6px;min-height:84px;background:#efeae2 radial-gradient(rgba(0,0,0,.035) 1px,transparent 1.5px) 0 0/14px 14px}
+.wa-msg{background:#fff;border-radius:4px 14px 14px 14px;padding:10px 13px;font-size:.9rem;line-height:1.45;max-width:90%;box-shadow:0 1px 1px rgba(0,0,0,.1);animation:msgIn .3s ease}
+.wa-msg[hidden]{display:none}
+.wa-msg.typing{display:inline-flex;gap:4px;padding:13px 15px}.wa-msg.typing span{width:7px;height:7px;border-radius:50%;background:#9aa5a0;animation:dot 1.1s infinite}
+.wa-msg.typing span:nth-child(2){animation-delay:.18s}.wa-msg.typing span:nth-child(3){animation-delay:.36s}
+@keyframes dot{0%,60%,100%{transform:none;opacity:.5}30%{transform:translateY(-4px);opacity:1}}
+@keyframes msgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.wa-chips{display:flex;flex-wrap:wrap;gap:6px;padding:8px 12px 10px}
+.wa-chip{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid #d6ddd9;color:#075e54;font:700 .76rem var(--font);padding:6px 11px;border-radius:99px;transition:.18s}
+.wa-chip i{font-style:normal}.wa-chip:hover{background:#dcf8c6;border-color:#25d366;transform:translateY(-1px)}
+.wa-cta{display:flex;align-items:center;justify-content:center;gap:9px;background:#25d366;color:#fff;font:800 .9rem var(--head);padding:13px;transition:.2s}
+.wa-cta svg{width:20px;height:20px;fill:#fff}.wa-cta:hover{background:#1ebe5a}
+
+@media(max-width:980px){.rv-layout{grid-template-columns:1fr}.rv-form-card{position:static}}
+@media(max-width:560px){.rv-masonry{columns:1}#rvForm .two{grid-template-columns:1fr}.wa{right:12px;bottom:12px}.wa-btn{width:56px;height:56px}}
+@media(prefers-reduced-motion:reduce){.wa-btn,.wa-btn .ring,.wa-badge{animation:none!important}}
+
